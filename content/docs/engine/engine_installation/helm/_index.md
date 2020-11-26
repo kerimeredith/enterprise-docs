@@ -13,7 +13,7 @@ Helm is the package manager for Kubernetes, inspired by packaged managers such a
 
 Helm makes it simple to package and deploy applications to be deployed including versioning. upgrade and rollback of applications. Helm does not replace Docker images, in fact docker images are deployed by Helm into a kubernetes cluster.
 
-Helm is comprised a client side component, Helm, which helps with creating, installing, and managing applications inside of Kubernetes. Helm applications, packaged as charts, can be deployed and managed using a single command:
+Helm is comprised of a client side component which helps with creating, installing, and managing applications inside of Kubernetes. Helm applications, packaged as charts, can be deployed and managed using a single command:
 
 `helm install myAppName myApp`
 
