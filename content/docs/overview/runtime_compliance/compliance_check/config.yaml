@@ -1,0 +1,72 @@
+# REM configs
+
+# Whether or not to upload report data to Anchore
+upload: false
+
+oscap:
+  install: true
+
+  # If a custom OSCAP profile is desired, specify it's path here
+  # Note: this will be placed into a /tmp/anchore/ directory in the container at runtime, so the command being executed
+  # Should take that into account
+  custom-profile-path:
+
+# Report storage location
+report:
+  resultfile: "/tmp/report.html"  # raw xml report
+  podname: ""
+  namespace: "default"
+  containername: ""
+  reportfile: "/tmp/report.html" # pretty output report generated page.
+
+# Policy storage location
+policy:
+  name: "remTest1"
+  path: "/anchore/policies"
+
+# Database information
+database:
+  name: "rem"
+  path: "/tmp/local-rem/" # this path is only valid for sqlite
+
+# Phone home information
+anchore:
+  url: "http://localhost:8080/upload"
+  user: "< username >"
+  password: "< password >"
+  http:
+    insecure: false
+    timeout-seconds: 60
+
+log:
+  #file: "/tmp/rem/logs"
+  level: "debug"
+  structured: false
+
+# REM supports Kubernetes Configuration in the following manner:
+#   1. If you have a Kubeconfig at ~/.kube/config, you don't need to set any of these fields below, REM will just use that
+#   2. If you want to explicitly specify kubernetes configuration details, you can do so in each field below (ignore path)
+#   3. If you are running REM within Kubernetes, set path to "use-in-cluster" and set cluster to the cluster name and you don't need to set any of the other fields
+kubeconfig:
+  path: "" # set to "use-in-cluster" if running within kubernetes
+  cluster: <cluster name here>
+  cluster-cert: # base64 encoded cluster cert
+  server:  # ex. https://kubernetes.docker.internal:6443
+  user:
+    type:  # valid: [private_key, token]
+    client-cert: # if type==private_key, base64 encoded client cert
+    private-key: # if type==private_key, base64 encoded private key
+    token: # plaintext service account token
+
+# Configuration of the command that REM is executing
+command:
+  # If no command is specified through arguments passed to the application on the command line, this command will be used
+  # Each element of the list is interpreted as part of the command
+  # I.E. echo 'hello-world' > /tmp/test.txt would look like:
+  #   cmd:
+  #     - echo
+  #     - 'hello-world' > /tmp/tst.txt
+  cmd:
+
+  # How long before the given command should timeout
+  timeout-minutes: 60
