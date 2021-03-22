@@ -136,7 +136,113 @@ paths:
           description: "Image not found"
         500:
           description: "Internal Error"
-
+  /runtime_compliance:
+    post:
+      x-swagger-router-controller: anchore_enterprise.services.catalog.api.controllers.enterprise
+      operationId: add_runtime_compliance_check
+      summary: Post a runtime compliance check
+      description: Post a runtime compliance check
+      consumes:
+        - multipart/form-data
+      produces:
+        - application/json
+      parameters:
+        - name: check_type
+          in: formData
+          type: string
+          required: true
+          description: The type of runtime compliance check
+        - name: image_digest
+          in: formData
+          type: string
+          required: true
+          description: The digest of the pod the check was run against
+        - name: result
+          in: formData
+          type: string
+          description: The result of the runtime compliance check
+        - name: pod
+          in: formData
+          type: string
+          description: The pod the check was run against
+        - name: namespace
+          in: formData
+          type: string
+          description: The namespace of the pod the check was run against
+        - name: image_tag
+          in: formData
+          type: string
+          description: The tag of image in the pod the check was run against
+        - name: start_time
+          in: formData
+          type: string
+          format: date-time
+          description: The type of runtime compliance check
+        - name: end_time
+          in: formData
+          type: string
+          format: date-time
+          description: The type of runtime compliance check
+        - name: result_file
+          in: formData
+          type: file
+          required: false
+          description: The file with the check results
+        - name: report_file
+          in: formData
+          type: file
+          required: false
+          description: The file with the check port
+      responses:
+        200:
+          description: "success"
+          schema:
+            $ref: "#/definitions/RuntimeComplianceCheck"
+        500:
+          description: "Internal Error"
+    get:
+      x-swagger-router-controller: anchore_enterprise.services.catalog.api.controllers.enterprise
+      operationId: get_runtime_compliance_checks
+      description: Get all runtime compliance checks or just those for a given image digest
+      summary: Get all runtime compliance checks or just those for a given image digest
+      produces:
+        - application/json
+      parameters:
+        - name: image_digest
+          in: query
+          type: string
+          required: false
+      responses:
+        200:
+          description: Compliance evaluation retrieval success
+          schema:
+            $ref: "#/definitions/RuntimeComplianceCheckList"
+        404:
+          description: No runtime compliance checks found
+        500:
+          description: "Internal Error"
+  /runtime_compliance/result/{result_id}:
+    get:
+      x-swagger-router-controller: anchore_enterprise.services.catalog.api.controllers.enterprise
+      operationId: get_runtime_compliance_result
+      description: Get the results of a specific runtime compliance check
+      summary: Check the results of a a specific runtime compliance check
+      produces:
+        - application/json
+      parameters:
+        - name: result_id
+          in: path
+          type: string
+          required: true
+      responses:
+        200:
+          description: Compliance evaluation retrieval success
+          schema:
+            type: string
+        404:
+          description: No runtime compliance results found
+        500:
+          description: "Internal Error"
 definitions:
   ApiErrorResponse:
     description: "Generic HTTP API error response"
@@ -303,3 +409,50 @@ definitions:
           type: string
           description: The layer ID
           example: "sha256:03810167880e863d81dc60fc7771c975b93dfdf982d5677fb2c23d11b02c644b"
+  RuntimeComplianceCheckList:
+    type: array
+    description: List of runtime compliance checks
+    items:
+      $ref: "#/definitions/RuntimeComplianceCheck"
+  RuntimeComplianceCheck:
+    description: The result of a runtime compliance check
+    type: object
+    required:
+      - check_type
+    properties:
+      check_type:
+        type: string
+        description: The type of runtime compliance check
+        enum:
+          - oscap
+      result:
+        type: string
+        description: The result of the runtime compliance check
+      pod:
+        type: string
+        description: The pod the check was run against
+      namespace:
+        type: string
+        description: The namespace of the pod the check was run against
+      image_tag:
+        type: string
+        description: The tag of image in the pod the check was run against
+      digest:
+        type: string
+        description: The digest of the pod the check was run against
+      start_time:
+        type: string
+        description: RFC 3339 formatted UTC timestamp when the runtime check started
+        format: date-time
+        example: 2020-10-20T01:20:11.378022Z
+      end_time:
+        type: string
+        description: RFC 3339 formatted UTC timestamp when the runtime check ended
+        format: date-time
+        example: 2020-10-20T01:20:11.378022Z
+      file_ids:
+        description: Ids of the files generated by the runtime compliance check
+        type: array
+        items:
+          type: string
+
