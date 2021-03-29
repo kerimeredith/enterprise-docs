@@ -8,7 +8,7 @@ weight: 2
 
 Anchore Enterprise remote execution manager (rem) enables an operator to run a compliance check for a defined container 
 within a Kubernetes Cluster. REM contains functionality to perform package management such as installation and removal
-of OpenSCAP, retrieval of generated results files that will be sent to the compliance API, and the ability to provide a
+of OpenSCAP, retrieval of generated results files, and upload compabilities to the compliance API. There is also a provided
 local data-store if upload functionality is disabled or unavailable.
 
 
