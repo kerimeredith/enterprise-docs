@@ -1,0 +1,93 @@
+# REM config
+
+# If set to true, the log level will be set to "panic" and all logging will be suppressed
+quiet: false
+
+# Whether or not to upload report data to Anchore
+upload: false
+
+# If upload is enabled, this configuration block will tell REM where anchore is located for the upload
+anchore:
+  # Note: if changing the hostname, be sure to keep the path the same as it is interpreted directly by the REM upload client
+  url: "http://localhost:8228/v1/enterprise/runtime_compliance"
+  user: ""
+  password: ""
+  http:
+    # If true, TLS verification will be skipped on upload to Anchore
+    insecure: false
+
+    # This timeout is for the report and/or result file upload to Anchore
+    timeoutSeconds: 60
+
+# Database information
+database:
+  name: "remdb"
+
+  # REM uses the bbolt (https://github.com/etcd-io/bbolt) pure-go key-value data store, which ends up in a
+  # single file per database, much like sqlite. If the default values are used, the file will be located at
+  # /tmp/anchore/rem/remdb
+  # Note: the path should end in a slash
+  path: "/tmp/anchore/rem/"
+
+# This section tells REM the execution details for the STIG check report:
+# Pod Name, Namespace, and Container Name are required so that REM knows where to exec the stig check
+report:
+  podName: ""
+  namespace: "default"
+  containerName: ""
+
+  # These must be set via the file, and correspond to the command being executed in the container
+  # For example, if your compliance check command looks like this:
+  #   oscap xccdf eval --profile <profile> --results /tmp/anchore/result.xml --report /tmp/anchore/report.html target.xml
+  # The values should for --results and --report should match the values of these configurations.
+  # The file paths defined here are also where REM downloads the files from the container. You can think of it like this:
+  #    docker cp container:/tmp/anchore/report.html /tmp/anhore/report.html
+  reportFile: "/tmp/report.html"
+  resultFile: "/tmp/result.xml"
+
+log:
+  # If set to a non-empty string value, all logs will be outputted to this file
+  file: ""
+
+  # Valid values include: [trace, debug, info, warn|warning, error, fatal, panic]
+  level: "info"
+
+  # If set to true, REM will use the logrus JSON formatter for it's logging
+  structured: false
+
+# REM supports Kubernetes Configuration in the following manner:
+#   1. If you have a Kubeconfig at ~/.kube/config, you don't need to set any of these fields below, REM will just use that
+#   2. If you want to explicitly specify kubernetes configuration details, you can do so in each field below (ignore path)
+#   3. If you are running REM within Kubernetes, set path to "use-in-cluster" and set cluster to the cluster name and you don't need to set any of the other fields
+kubeconfig:
+  path: "" # set to "use-in-cluster" if running REM within a kubernetes container
+  cluster: ""
+  clusterCert: # base64 encoded cluster cert
+  server:  # ex. https://kubernetes.docker.internal:6443
+  user:
+    type:  # valid: [private_key, token]
+    clientCert: # if type==private_key, base64 encoded client cert
+    privateKey: # if type==private_key, base64 encoded private key
+    token: # plaintext service account token
+
+# Configuration of the command that REM is executing
+command:
+  # If no command is specified through arguments passed to the application on the command line, this command will be used
+  # Note: currently only the oscap command is allowed
+  cmd:
+
+  # How long before the given command should timeout
+  timeoutMinutes: 60
+
+  oscap:
+    # This boolean flag tells REM whether or not to try to install OpenSCAP into the container (if the command is oscap)
+    installEnabled: true
+
+    # This boolean flag tells REM whether or not to try to uninstall OpenSCAP from the container
+    # (after the oscap command runs and the result/report files get downloaded)
+    uninstallEnabled: true
+
+    # If a custom OSCAP target is desired, specify it's path here
+    # Note: this will be placed into a /tmp/anchore/ directory in the container at runtime, so the command being executed
+    # Should take that into account
+    customTargetPath:
