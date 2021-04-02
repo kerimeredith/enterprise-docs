@@ -4,11 +4,11 @@ linkTitle: "Stig Check"
 weight: 2
 ---
 
-#Remote Compliance Check
+## Remote Compliance Check
 
-Anchore Enterprise remote execution manager (rem) enables an operator to run a compliance check for a defined container 
+Anchore Enterprise Remote Execution Manager (REM) enables an operator to run a compliance check for a defined container 
 within a Kubernetes Cluster. REM contains functionality to perform package management such as installation and removal
-of OpenSCAP, retrieval of generated results files, and upload compabilities to the compliance API. There is also a provided
+of OpenSCAP, retrieval of generated results files, and upload capabilities to the compliance API. There is also a provided
 local data-store if upload functionality is disabled or unavailable.
 
 
@@ -41,9 +41,9 @@ brew install anchore/rem/rem
 ```
 
 #### Download Release Script
-A provided [bash utility script](./extra/download-release) can be used for Linux and MacOS users.
+You can use a [bash utility script](./extra/download-release) can be used for Linux and MacOS users.
 
-To download the latest release, just run the script:
+To download the latest release, run the script:
 ```
 ./extra/download-release 
 ```
@@ -55,16 +55,15 @@ To download a specific version/artifact, add arguments:
 
 ### Usage:
 
-REM can work well out of the box with minimal required configurations.
+REM can work well out-of-the-box with minimal required configurations.
 
 At the very least, REM needs to be able to authenticate with the Kubernetes API, know which command to run, and know which
 pod and container to connect to. If you have a Kube Config at `~/.kube/config`, REM can use that out-of-the-box.
 
-To see how to configure REM with these minimal details, see [here](#pod-configuration)
+To see how to configure REM with these minimal details, see the [Pod Configuration section](#pod-configuration)
 
-#### Completion
-REM supports shell completion for bash, zsh, and fish. Run `rem completion -h` for more information
-
+#### Shell Completion
+REM supports completion for BASH, Zsh, and Fish shells. Run `rem completion -h` for more information.
 ### Configuration
 
 REM will search for the configuration file in a few locations:
@@ -100,7 +99,7 @@ rem/config.yaml
 ```
 
 It is always recommended to use the configuration file that is attached to each release as an artifact.
-The [example](./rem.yaml) in the repository is a good reference for explaining which configuration key does what.
+The [example configuration file](./rem.yaml) in the repository is a good reference for explaining which configuration key does what.
 
 ### Pod configuration
 
@@ -143,10 +142,10 @@ kubeconfig:
 ````
 As an alternative, or a way to override the setting in the configuration file on the command line, you can pass a few flags to set new values.
 ```
-// Here, <cmd> is the full oscap command to execute within the container, and the args before the double hyphen '--' are telling REM where to run the command
+Here, <cmd> is the full oscap command to execute within the container, and the args before the double hyphen '--' are telling REM where to run the command
 $ rem kexec -n <namespace> -p <pod> -c <container> -k <kubeconfig-path-override> -- <cmd>
 
-// Example (this will use kubeconfig at ~/.kube/config)
+Example (this will use kubeconfig at ~/.kube/config)
 $ rem kexec -n default -p anchore-pod -c anchore-container -- oscap xccdf eval --profile standard --result /tmp/result.xml --report /tmp/report.html target.xml 
 ```
 Note: The double hyphen `--` is important because it tells REM that all subsequent flags should be passed to the container command
@@ -182,7 +181,7 @@ or allow REM to automatically install the missing tool needed to run the complia
 ***note: uninstallEnabled can be set to false if you intend on leaving the tool available.***
 
 Running the following will install OpenSCAP but this is not mandatory.
-```textmate
+```text
 > rem kexec install oscap
 ```
 
@@ -209,7 +208,7 @@ command:
   cmd: oscap xccdf eval --profile xccdf_org.ssgproject.content_profile_stig --fetch-remote-resources --results /tmp/anchore/result.xml --report /tmp/anchore/report.html /usr/share/xml/scap/ssg/content/ssg-rhel8-ds.xml
 ```
 
-Once the check has completed the report and results should be located in the described path in the configured under the report section.
+Once the check has completed the report and results file should be located in the set path passed into openSCAP.
 
 ### Custom STIG targets
 
