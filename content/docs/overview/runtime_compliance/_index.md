@@ -14,11 +14,11 @@ As of 3.1, Anchore has introduced a new runtime compliance API that users can ut
 The Compliance API can be found in the [Enterprise API swagger specification](/current/docs/using/api_usage/specs/enterprise_api_swagger.yaml). This API allows for the creation and retrieval of runtime compliance checks and any document reports provided in the creation calls.
 
 The following is an example of the body of an API call to create a runtime compliance check using the Compliance API to be submitted as a multipart form to support file upload:
-```
+```json
 {
   "check_type": "oscap", // type of compliance check to report
   "result": "pass", // overall result of compliance check
-  "pod": "postgres-9.6", // k8 pod that the compliance check was run against
+  "pod": "postgres-9.6", // k8s or kubernetes pod the compliance check was run against
   "namespace": "dev", // the namespace of the pod
   "image_tag": "9.6", // tag of the image that the pod is running
   "image_digest": "sha256:a435b8edc3bdb4d766818dc6ce22ca3a5e6a922d19ca7001afd1359d060500eb", // the digest of the running image
@@ -29,7 +29,7 @@ The following is an example of the body of an API call to create a runtime compl
 }
 ```
 
-Two fields are required for the creation of runtime compliance checks. The `type` field references the type of scan that generates the report. As of right now, the only supported option is `oscap`, which stands for OpenSCAP, but this is expected to grow with future releases. The other required field is `image_digest`, which represent the image used by the container that the runtime compliance check was run against. 
+Two fields are required for the creation of runtime compliance checks. The `type` field references the type of scan that generates the report. As of right now, the only supported option is `oscap`, which stands for OpenSCAP, but this is expected to grow with future releases. The other required field is `image_digest`, which represents the image used by the container that the runtime compliance check was run against. 
 
 While not required, the `status` attribute is used to designate whether the given compliance check has passed or failed. There are several additional metadata fields provided to further contextualize the runtime check, such as the `pod` and `namespace` that the check was run against. 
 
