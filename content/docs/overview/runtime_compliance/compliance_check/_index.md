@@ -33,7 +33,7 @@ REM can be installed various ways depending on your distribution.
 Currently, for windows users, the best way to get REM is to download the compiled windows binary from our [releases page](https://github.com/anchore/rem/releases)
 
 #### Homebrew
-To install REM via homebrew, a github token with access to this repository and [homebrew-rem](https://github.com/anchore/homebrew-rem) is required
+To install REM via homebrew, a [github token](https://github.com/settings/tokens/new) with read access to [anchore/rem](https://github.com/anchore/rem) and [anchore/homebrew-rem](https://github.com/anchore/homebrew-rem) is required.
 ```
 export HOMEBREW_GITHUB_API_TOKEN='xxx'
 brew tap anchore/rem
@@ -71,7 +71,7 @@ REM will search for the configuration file in a few locations:
 ***The following examples are listed in the order of precedence.***
 
 
-From the CLI you can pass a "-f" or "--config" flag with the path to the configuration file.
+From the CLI you can pass a `-f` or `--config` flag with the path to the configuration file.
 
 ```text
 > rem -f /tmp/anchore/config.yaml
