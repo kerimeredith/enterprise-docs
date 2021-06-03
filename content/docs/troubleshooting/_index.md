@@ -1,10 +1,10 @@
 ---
-title: "Trouble Shooting"
-linkTitle: "Trouble Shooting"
+title: "Troubleshooting"
+linkTitle: "Troubleshooting"
 weight: 9
 ---
 
-This guide will walkthrough some general troubleshooting tips with your Anchore Enterprise instance. When troubleshooting Anchore Enterprise, the recommend approach is to first verify all Anchore services are up, use the event subsystem to narrow down particular issues, and then navigate to the logs for specific services to find out more information.
+This guide will walk through some general troubleshooting tips with your Anchore Enterprise instance. When troubleshooting Anchore Enterprise, the recommended approach is to first verify that all Anchore services are up, use the event subsystem to narrow down particular issues, and then navigate to the logs for specific services to find out more information.
 
 If you are running into issues performing certain Anchore operations (examples: images are failing analysis or cannot access a private registry) please consult the [FAQ]({{< ref "/docs/faq" >}}) document.
 
@@ -17,7 +17,7 @@ Throughout this guide, Anchore CLI commands will be executed to assist with trou
 
 ## Verifying Healthy Service Status
 
-There is a minimum set of anchore service components that must be running for a deployment to be functional:
+There is a minimum set of Anchore service components that must be running for a deployment to be functional:
 
 - Service analyzer
 - Service policy_engine
@@ -39,7 +39,7 @@ Engine DB Version: 0.0.12
 Engine Code Version: 0.6.0
 ```
 
-An Anchore Enterprise deployment will show additional services, and also includes a system health control in the Anchore Enterprise UI with additional service status information:
+An Anchore Enterprise deployment will show additional services, and includes a system health control in the Anchore Enterprise UI with additional service status information:
 
 ```
 # anchore-cli system status
@@ -62,7 +62,7 @@ Engine Code Version: 0.6.0
 
 ### The --debug and --json options
 
-Passing the `--debug` option to any Anchore CLI can often help narrow down particular issues, by displaying the API calls that are being made from the CLI tool to anchore enterprise itself.
+Passing the `--debug` option to any Anchore CLI can often help narrow down particular issues, by displaying the API calls that are being made from the CLI tool to Anchore Enterprise itself.
 
 ```
 # Example system status with --debug
@@ -114,11 +114,11 @@ Passing the `--json` option to any Anchore CLI commands will output the direct A
 
 ## Events
 
-If you've successfully verified that all of the Anchore Enterprise services are up, but are still running into issues operating Anchore a good place check is the event log.
+If you've successfully verified that all the Anchore Enterprise services are up, but are still running into issues operating Anchore, a good place check is the event log.
 
-The event log subsystem provides users with a mechanism to inspect asynchronous event occurring across various Anchore Enterprise services. Anchore events include periodically triggered activities such as vulnerability data feed sync in the policy_engine service, image analysis failures originating from the analyzer service, and other informational or system fault events. The catalog service may also generate events for any repositories or image tags that are being watched, when Anchore Enterprise encounters connectivity, authentication, authorization or other errors in the process of checking for updates.
+The event log subsystem provides users with a mechanism to inspect asynchronous events occurring across various Anchore Enterprise services. Anchore events include periodically triggered activities such as vulnerability data feed sync in the policy_engine service, image analysis failures originating from the analyzer service, and other informational or system fault events. The catalog service may also generate events for any repositories or image tags that are being watched, when Anchore Enterprise encounters connectivity, authentication, authorization or other errors in the process of checking for updates.
 
-The event log is aimed at troubleshooting most common failure scenarios (especially those that happen during asynchronous operations) and to pinpoint the reasons for failures, that can be used subsequently to help with corrective actions. Events can be cleared from Anchore Enterprise in bulk or individually.
+The event log is aimed at troubleshooting the most common failure scenarios (especially those that happen during asynchronous operations) and to pinpoint the reasons for failures, which can be used subsequently to help with corrective actions. Events can be cleared from Anchore Enterprise in bulk or individually.
 
 ### Viewing Events
 
@@ -175,13 +175,13 @@ timestamp: '2019-12-06T22:37:45.354266Z'
 type: system.feeds.sync.started
 ```
 
-**Note:** Depending on the output from the detailed events, looking into the logs for a particular servicename (example: policy_engine) is the next troubleshooting step.  
+**Note:** Depending on the output from the detailed events, looking into the logs for a particular service name (example: policy_engine) is the next troubleshooting step.  
 
 ## Logs
 
-Anchore services produce detailed logs that container information about user interactions, internal processes, warnings and errors.  The verbosity of the logs is controlled using the log_level setting in config.yaml (for manual installations) or the corresponding ANCHORE_LOG_LEVEL environment variable (for docker-compose or Helm installations) for each service.  The log levels are DEBUG, INFO, WARN, ERROR, and FATAL, where the default is INFO.  Most of the time, the default level is sufficient as the logs will container warn, error and fatal messages as well, but for deep troubleshooting, it is always recommended to increase the log level to DEBUG in order to ensure the availability of the maximum amount of information.
+Anchore services produce detailed logs that contain information about user interactions, internal processes, warnings and errors.  The verbosity of the logs is controlled using the log_level setting in config.yaml (for manual installations) or the corresponding ANCHORE_LOG_LEVEL environment variable (for docker-compose or Helm installations) for each service.  The log levels are DEBUG, INFO, WARN, ERROR, and FATAL, where the default is INFO.  Most of the time, the default level is sufficient as the logs will container warn, error and fatal messages as well, but for deep troubleshooting, it is always recommended to increase the log level to DEBUG to ensure the availability of the maximum amount of information.
 
-Anchore logs can be accessed by inspecting the docker logs for any anchore service container using the regular docker logging mechanisms, which typically default to displaying to the stdout/stderr of the containers themselves - for example:
+Anchore logs can be accessed by inspecting the Docker logs for any Anchore service container using the regular Docker logging mechanisms, which typically default to displaying to the stdout/stderr of the containers themselves - for example:
 
 ```
 # docker ps
@@ -203,7 +203,7 @@ Anchore logs can be accessed by inspecting the docker logs for any anchore servi
 
 ```
 
-The logs themselves are also persisted as logfiles inside the anchore service containers.  Executing a shell into any Anchore service container and navigating to `/var/log/anchore`, you will find the service log files.  For example, using the same analyzer container service as above:
+The logs themselves are also persisted as logfiles inside the Anchore service containers.  Executing a shell into any Anchore service container and navigating to `/var/log/anchore`, you will find the service log files.  For example, using the same analyzer container service as above:
 ```
 # docker exec -t -i  aevolume_engine-analyzer_1 /bin/bash
 [anchore@687818c10b93 anchore-engine]$ cat /var/log/anchore/anchore-worker.log 
@@ -220,10 +220,10 @@ The logs themselves are also persisted as logfiles inside the anchore service co
 
 ```
 
-As stated above, if you are running into issues performing certain Anchore operations (examples: images are failing analysis or cannot access a private registry) please consult the [FAQ]({{< ref "/docs/faq" >}}) document.
+If you are running into issues performing certain Anchore operations (examples: images are failing analysis or cannot access a private registry) please consult the [FAQ]({{< ref "/docs/faq" >}}) document.
 
 ## Removing a Repository and Images
 
-There may be a time when you wish to stop a repository analysis when the analysis is running (e.g., accidentally watching an image with a large number of tags).  There are several steps in the process which can be found under [Removing a Repository and All Images]({{< ref "/docs/using/cli_usage/repositories/_index.md#removing-a-repository-and-all-images" >}}).
+There may be a time when you wish to stop a repository analysis when the analysis is running (example: accidentally watching an image with a large number of tags).  There are several steps in the process which can be found under [Removing a Repository and All Images]({{< ref "/docs/using/cli_usage/repositories/_index.md#removing-a-repository-and-all-images" >}}).
 
 **Note:** Be careful when deleting images. In this flow, Anchore deletes the image, not just the repository/tag combo.  Because of this, deletes may impact more than the expected repository since an image may have tags in multiple repositories or even registries.
